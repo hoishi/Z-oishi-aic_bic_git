@@ -3,8 +3,8 @@ function s_aic_bic
 % calculates aic and bic of linear reggression models and geneate statistic profile of 
 % The minimum aic or bic model is the best model explaining the object
 % variable, behavior data (Here, stereoacuity).
-% Then, check the model fitting is signiticant using statistic profile. In
-% parcicular, check if the pvalue is significant 
+% Then, check if the model fitting is signiticant using statistic profile. In
+% parcicular, check if the pvalue of explanatory variables are significant 
 % The function, fitlm needs matlab after version 2013 and Statistics and Machine Learning
 % Toolbox.
 % Hiroki Oishi 2018 0604
@@ -18,7 +18,7 @@ RILF = load('RILF_gradient2_AFQ330_median_qMRI.mat');
 LOR = load('LOR_top50000_AFQ330_qMRI.mat');
 ROR = load('ROR_top50000_AFQ330_qMRI.mat');
 
-%% Load behavior data
+%% Load behavior data The behavior data needs to be included in a row matrix.
 load('threshold_84%correctrate_withcondition.mat');
 usesbj = find(~isnan(value));% remove outlier subjects
 stereoacuity = value(usesbj)';% object veariable here
