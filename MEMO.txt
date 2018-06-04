@@ -1,0 +1,1 @@
+s_aic_bic is the script which was used in Stereoacuity and MRI project.
