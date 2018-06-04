@@ -52,14 +52,16 @@ for i = 1:length(regid)
         AIC(i,j) = n*(1 + log(2*pi*sum(R{i,j}.^2))/n) + 2*(p(i,j) + 2);
         BIC(i,j) = n*(1 + log(2*pi*sum(R{i,j}.^2))/n) +log(n)*p(i,j);
         R0=corrcoef([tracts(:,regid{i}(j,:))]);
-        MODELVIF{i,j}=diag(inv(R0))';%Mmulticollinearity
+        MODELVIF{i,j}=diag(inv(R0))';%multicollinearity
     end
 end
 AIC(find(AIC==0)) = NaN;
 AICminregid = find(AIC == min(min(AIC)));
+[AIC_min(1),AIC_min(2)] = ind2sub(size(AIC), AICminregid);%extract sub-index
 BIC(find(BIC==0)) = NaN;
 BICminregid = find(BIC == min(min(BIC)));
-save('aicbicmat.mat','AIC','BIC', 'AICminregid', 'BICminregid', 'MODELVIF')%save AIC and BIC of all cominations and min combination
+[BIC_min(1), BIC_min(2)] = ind2sub(size(BIC), BICminregid);%extract sub-index
+save('aicbicmat.mat','AIC','BIC', 'AIC_min', 'BIC_min', 'MODELVIF')%save AIC and BIC of all cominations and min combination
 
 %% geneate statistic profile of the best linear reggresion model estimated by BIC
 [explainnum,combination] = ind2sub(size(BIC), BICminregid);
