@@ -7,6 +7,8 @@ function s_aic_bic
 % parcicular, check if the pvalue of explanatory variables are significant 
 % The function, fitlm needs matlab after version 2013 and Statistics and Machine Learning
 % Toolbox.
+% MODELVIF : VIFs (variance inflation factor) of the target model to check
+% the multiple colinearity. When VIF > 10, there are multicollinearity.
 % Hiroki Oishi 2018 0604
 
 %% Load tractprofile e.g. MTV  The required format is 100 nodes*subjectnum
@@ -49,13 +51,15 @@ for i = 1:length(regid)
         p(i,j) = size(regid{i}(j,:),2);%tract num
         AIC(i,j) = n*(1 + log(2*pi*sum(R{i,j}.^2))/n) + 2*(p(i,j) + 2);
         BIC(i,j) = n*(1 + log(2*pi*sum(R{i,j}.^2))/n) +log(n)*p(i,j);
+        R0=corrcoef([tracts(:,regid{i}(j,:))]);
+        MODELVIF{i,j}=diag(inv(R0))';%Mmulticollinearity
     end
 end
 AIC(find(AIC==0)) = NaN;
 AICminregid = find(AIC == min(min(AIC)));
 BIC(find(BIC==0)) = NaN;
 BICminregid = find(BIC == min(min(BIC)));
-save('aicbicmat.mat','AIC','BIC', 'AICminregid', 'BICminregid')%save AIC and BIC of all cominations and min combination
+save('aicbicmat.mat','AIC','BIC', 'AICminregid', 'BICminregid', 'MODELVIF')%save AIC and BIC of all cominations and min combination
 
 %% geneate statistic profile of the best linear reggresion model estimated by BIC
 [explainnum,combination] = ind2sub(size(BIC), BICminregid);
